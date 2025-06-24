@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My React Tailwind App</title>
+    <link rel="stylesheet" href="/style/index.css">
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.x/dist/pixi.min.js"></script>
+    <script>
+     document.addEventListener("DOMContentLoaded", function () {
+  const app = new PIXI.Application({
+    resizeTo: window,
+    transparent: true,
+    antialias: false,
+  });
+  
+  app.view.style.position = "fixed";
+  app.view.style.inset = 0;
+  app.view.style.zIndex = 0;
+  app.view.style.pointerEvents = "none";
+  document.body.prepend(app.view);
+
+  const texture = PIXI.Texture.from("/background.png");
+  const tilingSprite = new PIXI.TilingSprite(
+    texture,
+    window.innerWidth,
+    window.innerHeight
+  );
+  
+  // 🔥 Ajusta el tamaño de cada tile a 10x10 píxeles
+  tilingSprite.tileScale.set(0.1); // Si la imagen original es 100x100px, escala al 10%
+  // O si sabes el tamaño exacto de tu textura:
+  // tilingSprite.tileScale.set(10 / texture.width, 10 / texture.height);
+  
+  app.stage.addChild(tilingSprite);
+
+  app.ticker.add(() => {
+  tilingSprite.tilePosition.x -= 0.3; // Desplazamiento hacia la izquierda
+  tilingSprite.tilePosition.y -= 0.3; // Desplazamiento hacia arriba (ajusta el valor para cambiar la dirección)
+});
+
+  window.addEventListener("resize", () => {
+    tilingSprite.width = window.innerWidth;
+    tilingSprite.height = window.innerHeight;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+  });
+});
+    </script>
+</body>
+</html>
